@@ -1,10 +1,10 @@
 def GetMap(file):
     # Dicionario que relaciona cada string com sua frequencia
     freqMap = {}
-    # Em Go nao existe while, for {} é equivalente a while true:
-    while true:
+    # Em Go nao existe while, for {} é equivalente a while True:
+    while True:
         # Em python ler arquivos só retorna uma variavel
-        r = file.Read(1)
+        r = file.read(1)
         # Nao temos que lidar com um possivel erro
         # Se chegar ao fim do arquivo saimos do loop
         if r == '':
@@ -17,4 +17,6 @@ def GetMap(file):
         # ou adiciona um novo key ao Dicionario
         ## O debug ainda nao é necessario pois nao encontramos o problema das runas
         # Nesse caso o python nao é tao bom quanto o Go
-        freqMap[r] = 0 if r not in freqMap else freqMap[r] + 1
+        freqMap[r] = 1 if r not in freqMap else freqMap[r] + 1
+
+    return freqMap
