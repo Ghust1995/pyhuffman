@@ -1,6 +1,6 @@
 # Python nao oferece a facilidade das implementacoes de interfaces como o Go faz
 # Assim, teremos que criar um arquivo de teste com classes para cada um
-import unittest, os
+import unittest, os, codecs
 from tempfile import TemporaryDirectory
 
 import frequency, gardener, huffman
@@ -35,8 +35,10 @@ class TestHuffman(unittest.TestCase):
                 testFile.write(testString)
             with open(tempFileName, 'r') as testFile:
                 huffman.Compress(testFile, compressedOutput)
-
+                co = codecs.open(compressedOutput, 'r', 'utf-8')
+                huffman.Decompress(co, decompressedOutput)
+                co.close()
 
 
 if __name__ == '__main__':
-    unittest.main
+    unittest.main()

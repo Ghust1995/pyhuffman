@@ -1,6 +1,8 @@
+import codecs
+
 from gardener import Harvest
 from frequency import GetMap
-import bit.writer, bit.reader as bit
+import bit
 from tree import Node
 
 # Metodo para escrever a arvore recursivamente
@@ -11,7 +13,7 @@ def writeNode(node, writer):
         writer.write(1)
         writer.writebyte(node.Value)
     else:
-        write.write(0)
+        writer.write(0)
         writeNode(node.Left, writer)
         writeNode(node.Right, writer)
 
@@ -57,7 +59,7 @@ def Compress(file, outputName):
     file.seek(0, 0)
 
     # Escrever arvora
-    outputFile = open(outputName, 'w')
+    outputFile = codecs.open(outputName, 'w', 'utf-8')
     writer = bit.Writer(outputFile)
     writeNode(root, writer)
 
@@ -78,21 +80,24 @@ def reverseBits(b):
 # Metodo para ler a arvore recursivamente
 def readTree(reader):
     read = reader.read()
-    if read == "1": # folha
+    if read == 1: # folha
         char = reader.readbyte()
-        char = reverseBits(char)
+        print('char: ' + str(char))
+        if char:
+
+            char = reverseBits(char)
 
         return Node(char, None, None)
-    else: # Tem dois filhos
+    elif read == 0: # Tem dois filhos
         leftChild = readTree(reader)
         rightChild = readTree(reader)
         return Node("", leftChild, rightChild)
 
 def decodeFile(reader, outputname, root):
-    with Open(outputname, 'r') as output:
+    with codecs.open(outputname, 'w', 'utf-8') as output:
         node = root
         while True:
-            bit = reader.Read()
+            bit = reader.read()
             if bit == '':
                 break
 
@@ -101,7 +106,7 @@ def decodeFile(reader, outputname, root):
 
             # Checar se chegarmos a uma folha
             if node.isLeaf():
-                output.write(node.Value)
+                output.write(str(node.Value))
                 node = root
 # Recebe um arquivo comprimido (objeto) e retorna o arquivo original (objeto)
 def Decompress(file, outputName):
