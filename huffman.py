@@ -19,12 +19,12 @@ def writeNode(node, writer):
 
 # Metodo para criar um dicionario para o caracter e seu codigo gerado
 # e seu codigo gerado pelo algoritmo de Huffman
-def createDict(node, dict, code):
+def createDict(node, dict, code = ""):
     if node.isLeaf():
         dict[node.Value] = code
     else:
-        createDict(node.Left, dict, code+'0')
-        createDict(node.Right, dict, code+'1')
+        createDict(node.Left, dict, code + '0')
+        createDict(node.Right, dict, code + '1')
 
 # Metodo para escrever o arquivo na forma codificada
 def writeCodified(file, dict, writer):
@@ -53,19 +53,18 @@ def Compress(file, outputName):
     if(root.isLeaf()):
         dict[root.Value] = 0
     else:
-        createDict(root, dict, "")
+        createDict(root, dict)
 
     # Resetar cursor
     file.seek(0, 0)
 
     # Escrever arvora
-    outputFile = codecs.open(outputName, 'w', 'utf-8')
-    writer = bit.Writer(outputFile)
-    writeNode(root, writer)
+    with codecs.open(outputName, 'w', 'utf-8') as outputFile:
+        writer = bit.Writer(outputFile)
+        writeNode(root, writer)
 
-    # Codificar
-
-    writeCodified(file, dict, writer)
+        # Codificar
+        writeCodified(file, dict, writer)
 
 # Helper
 def reverseBits(b):
@@ -81,11 +80,10 @@ def reverseBits(b):
 def readTree(reader):
     read = reader.read()
     if read == 1: # folha
-        char = reader.readbyte()
+        char = chr(reader.readbyte())
         # print('char: ' + str(char))
-        if char:
-
-            char = reverseBits(char)
+        # if char:
+        #     char = reverseBits(char)
 
         return Node(char, None, None)
     elif read == 0: # Tem dois filhos
@@ -102,12 +100,13 @@ def decodeFile(reader, outputname, root):
                 break
 
             # Anda na arvore, se bit = 0 vai para o filho esquerdo
-            node = node.Right if bit == '1' else node.Left
+            node = node.Right if bit == 1 else node.Left
 
             # Checar se chegarmos a uma folha
             if node.isLeaf():
                 output.write(str(node.Value))
                 node = root
+
 # Recebe um arquivo comprimido (objeto) e retorna o arquivo original (objeto)
 def Decompress(file, outputName):
     # Ler arvore (reconstruir)

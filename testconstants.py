@@ -1,7 +1,9 @@
 from tree import Node
 
 testString = "abbcccdddd"
+
 testMap = { 'a': 1, 'b': 2, 'c': 3, 'd': 4}
+
 testTree = Node(
     v = "",
     l =  Node(
@@ -31,6 +33,7 @@ testTree = Node(
             )
         )
     )
+
 testTreeBinary = '0' +  \
 ('1' + '01100100') +    \
 '0' +                   \
@@ -38,3 +41,7 @@ testTreeBinary = '0' +  \
 '0' +                   \
 ('1' + '01100001') +    \
 ('1' + '01100010')      \
+
+testCodeDict = { 'a': '110', 'b': '111', 'c': '10', 'd': '0'}
+
+testEncoded = '1101111111010100000'
