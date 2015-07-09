@@ -82,7 +82,7 @@ def readTree(reader):
     read = reader.read()
     if read == 1: # folha
         char = reader.readbyte()
-        print('char: ' + str(char))
+        # print('char: ' + str(char))
         if char:
 
             char = reverseBits(char)

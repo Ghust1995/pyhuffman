@@ -4,30 +4,37 @@ testString = "abbcccdddd"
 testMap = { 'a': 1, 'b': 2, 'c': 3, 'd': 4}
 testTree = Node(
     v = "",
-    r =  Node(
+    l =  Node(
         v = "d",
         r = None,
         l = None
         ),
-    l = Node(
+    r = Node(
         v = "",
-        r =  Node(
+        l =  Node(
             v = "c",
-            r = None,
-            l = None
+            l = None,
+            r = None
             ),
-        l  =  Node(
+        r  =  Node(
             v = "",
-            r = Node(
-                v = "a",
-                r = None,
-                l = None
-                ),
             l = Node(
+                v = "a",
+                l = None,
+                r = None
+                ),
+            r = Node(
                 v = "b",
-                r = None,
-                l = None
+                l = None,
+                r = None
                 )
             )
         )
     )
+testTreeBinary = '0' +  \
+('1' + '01100100') +    \
+'0' +                   \
+('1' + '01100011') +    \
+'0' +                   \
+('1' + '01100001') +    \
+('1' + '01100010')      \

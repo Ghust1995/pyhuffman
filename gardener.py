@@ -10,8 +10,8 @@ def Harvest(freqMap):
             return hh.Pop().Node
 
         # Caso contrario pegamos os dois elementos do topo
-        r = hh.Pop()
         l = hh.Pop()
+        r = hh.Pop()
 
         # E criamos uma "arvore" intermediaria com eles
         newItem = huffmanHeap.Item(

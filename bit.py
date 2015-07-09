@@ -40,11 +40,12 @@ class Writer():
         self.out = f
 
     def write(self, bit):
-        if self.bcount == 8 :
-            self.flush()
-        if bit == '1':
+        # print('   -Written:' + ('1' if int(bit) > 0 else '0'))
+        if int(bit) > 0:
             self.accumulator |= (1 << (7-self.bcount))
         self.bcount += 1
+        if self.bcount == 8 :
+            self.flush()
 
     def writebits(self, bits, n):
         while n > 0:
@@ -52,7 +53,9 @@ class Writer():
             n -= 1
 
     def writebyte(self, byte):
+        # print('Start writing byte:' + str(byte))
         self.writebits(byte, 8)
+        # print('End of writing byte:' + str(byte))
 
     # Para sabermos o lixo no fim do arquivo
     def close(self):
@@ -63,6 +66,7 @@ class Writer():
     		self.writebyte(chr(self.bcount))
 
     def flush(self):
+        # print("Flushed: " + chr(self.accumulator))
         self.out.write(chr(self.accumulator))
         self.accumulator = 0
         self.bcount = 0
