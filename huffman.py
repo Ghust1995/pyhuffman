@@ -1,4 +1,4 @@
-import codecs
+import codecs, sys, getopt
 
 from gardener import Harvest
 from frequency import GetMap
@@ -42,29 +42,30 @@ def writeCodified(file, dict, writer):
     writer.close()
 
 # Recebe um arquivo de texto e cria um arquivo comprimido
-def Compress(file, outputName):
-    # gerar a arvore a partit da frequencia dos caracteres no texto
-    root = Harvest(GetMap(file))
+def Compress(filename, outputName):
+    with codecs.open(filename, 'r', 'utf-8') as file:
+        # gerar a arvore a partit da frequencia dos caracteres no texto
+        root = Harvest(GetMap(file))
 
-    # gerar o dicionario
-    dict = {}
+        # gerar o dicionario
+        dict = {}
 
-    # Caso só tenha uma letra
-    if(root.isLeaf()):
-        dict[root.Value] = 0
-    else:
-        createDict(root, dict)
+        # Caso só tenha uma letra
+        if(root.isLeaf()):
+            dict[root.Value] = 0
+        else:
+            createDict(root, dict)
 
-    # Resetar cursor
-    file.seek(0, 0)
+        # Resetar cursor
+        file.seek(0, 0)
 
-    # Escrever arvora
-    with codecs.open(outputName, 'w', 'utf-8') as outputFile:
-        writer = bit.Writer(outputFile)
-        writeNode(root, writer)
+        # Escrever arvora
+        with codecs.open(outputName, 'w', 'utf-8') as outputFile:
+            writer = bit.Writer(outputFile)
+            writeNode(root, writer)
 
-        # Codificar
-        writeCodified(file, dict, writer)
+            # Codificar
+            writeCodified(file, dict, writer)
 
 # Helper
 def reverseBits(b):
@@ -108,17 +109,48 @@ def decodeFile(reader, outputname, root):
                 node = root
 
 # Recebe um arquivo comprimido (objeto) e retorna o arquivo original (objeto)
-def Decompress(file, outputName):
-    # Ler arvore (reconstruir)
-    reader = bit.Reader(file)
-    root = readTree(reader)
-    if root == None:
-        raise ErroNaArvore("Nula!")
+def Decompress(filename, outputName):
+    with codecs.open(filename, 'r', 'utf-8') as file:
+        # Ler arvore (reconstruir)
+        reader = bit.Reader(file)
+        root = readTree(reader)
+        if root == None:
+            raise ErroNaArvore("Nula!")
 
-    # Decodificar percorrendo a arvore
-    if root.isLeaf():
-        nodeHelper = Node()
-        nodeHelper.Left = root
-        root = nodeHelper
+        # Decodificar percorrendo a arvore
+        if root.isLeaf():
+            nodeHelper = Node()
+            nodeHelper.Left = root
+            root = nodeHelper
 
-    decodeFile(reader, outputName, root)
+        decodeFile(reader, outputName, root)
+
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "hc:d:", ["help"])
+    except Exception as e:
+        usage()
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit()
+        elif opt == "-c":
+            Compress(arg, arg[:len(arg) - arg.find('.')] + '.ch')
+        elif opt == "-d":
+            Decompress(arg, arg[:len(arg) - arg.find('.') + 1] + '_d.txt')
+
+usageString = """usage: huffman [--help] [-h] [-c <path>] [-d <path>]
+
+The commands are:
+-c \t\t Compress the file at path
+-d \t\t Decompress the file at path
+-h, --help \t Show available commands
+"""
+
+
+def usage():
+    print(usageString)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

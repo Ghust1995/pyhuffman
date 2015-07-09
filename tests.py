@@ -154,16 +154,14 @@ class TestHuffmanMethods(TestCase):
 
 
     def test_compress_decompress(self):
-        compressedOutput = 'testFile.ch'
-        decompressedOutput = 'testFile.txt'
         with TemporaryDirectory() as td:
             tempFileName = os.path.join(td, 'testFile')
+            compressedOutput = os.path.join(td, 'testFile.ch')
+            decompressedOutput = os.path.join(td, 'testFile.txt')
             with open(tempFileName, 'w') as testFile:
                 testFile.write(testString)
-            with open(tempFileName, 'r') as testFile:
-                huffman.Compress(testFile, compressedOutput)
-            with codecs.open(compressedOutput, 'r', 'utf-8') as co:
-                huffman.Decompress(co, decompressedOutput)
+            huffman.Compress(tempFileName, compressedOutput)
+            huffman.Decompress(compressedOutput, decompressedOutput)
             with codecs.open(decompressedOutput, 'r', 'utf-8') as do:
                 self.assertEqual(do.read(), testString)
 
