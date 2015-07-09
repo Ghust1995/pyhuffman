@@ -136,7 +136,7 @@ def main(argv):
             usage()
             sys.exit()
         elif opt == "-c":
-            Compress(arg, arg[:len(arg) - arg.find('.')] + '.ch')
+            Compress(arg, arg[:len(arg) - arg.find('.') + 2] + '.ch')
         elif opt == "-d":
             Decompress(arg, arg[:len(arg) - arg.find('.') + 1] + '_d.txt')
 

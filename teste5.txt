@@ -1,0 +1,5 @@
+﻿Olá Lucas,
+
+Conforme informado no e-mail anterior, apenas serão aceitos projetos com programas escritos em C, C++, Java ou Python.
+
+[]s
